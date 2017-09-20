@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 		resText << ctsT1.tmin << " " << ctsT1.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT1.photonsCount<< " " << expT1.photonsCount << " ";
-		resText << setprecision(10) << ctsT1.photonsCount / (double) expT1.photonsCount << " ";
+
 	}
 	else if(statusCts != 0){
 		cout <<"Error: the radius exceeds the border of the .cts map" << endl;
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 		resText << ctsT2.tmin << " " << ctsT2.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT2.photonsCount << " " << expT2.photonsCount << " ";
-		resText << setprecision(10) << ctsT2.photonsCount / (double) expT2.photonsCount << " ";
+
 	}
 	else if(statusCts != 0){
 		cout <<"Error: the radius exceeds the border of the .cts map" << endl;
@@ -200,8 +200,10 @@ int main(int argc, char *argv[])
 	cout << "bkg exp  " << (expT1.photonsCount + expT2.photonsCount) << endl;
 	cout << "bkg rate " << setprecision(10) << bkg / (double) (expT1.photonsCount + expT2.photonsCount) << endl;
 	
+
+	resText << alpha << " ";
 	resText << std::setprecision(2);
-	resText << "off " << bkg << " " << expT1.photonsCount + expT2.photonsCount << " " << std::setprecision(10) << bkg / (double) (expT1.photonsCount + expT2.photonsCount)<< " ";
+	resText << " off " << bkg << " " << expT1.photonsCount + expT2.photonsCount << " " << std::setprecision(10) << bkg / (double) (expT1.photonsCount + expT2.photonsCount)<< " ";
 	
 	double S = 0;
 	double SA = 0;
@@ -222,8 +224,8 @@ int main(int argc, char *argv[])
 		cout << "Li&Ma sigma 0" << endl;
 	
 	}
-	resText << S << " ";
-	resText << SA << endl;
+	resText << S << endl;
+	//resText << SA << endl;
 				
     
     resText.close();
