@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2017
+ *     Andrea Bulgarelli, Andrea Zoli (IASF-Bologna),
+ *
+ * Any information contained in this software
+ * is property of the AGILE TEAM and is strictly
+ * private and confidential.
+*/
+
+
 #include "BinEvaluator.h"
 
 BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, double _radius) {

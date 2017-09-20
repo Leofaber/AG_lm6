@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2017
+ *     Andrea Bulgarelli, Andrea Zoli (IASF-Bologna),
+ *
+ * Any information contained in this software
+ * is property of the AGILE TEAM and is strictly
+ * private and confidential.
+*/
+
+
 #ifndef EVALUATOR_H
 #define EVALUATOR_H
 
