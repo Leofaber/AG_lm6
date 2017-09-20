@@ -17,6 +17,8 @@ BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, doub
 	radius=_radius;
 	photonsCount=0;
 	agileMapUtils = new AgileMap(_fitsFilePath);
+	tmin = agileMapUtils->GetTstart();
+	tmax = agileMapUtils->GetTstop();
 	image= FitsToCvMatConverter::convertFitsToCvMat(_fitsFilePath);
 }
 
