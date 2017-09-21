@@ -15,14 +15,14 @@ BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, doub
 	l=_l;
 	b=_b;
 	radius=_radius;
-	photonsCount=0;
+	binSum=0;
 	agileMapUtils = new AgileMap(_fitsFilePath);
 	tmin = agileMapUtils->GetTstart();
 	tmax = agileMapUtils->GetTstop();
 	image= FitsToCvMatConverter::convertFitsToCvMat(_fitsFilePath);
 }
 
-int BinEvaluator::evalExpAndCounts() {
+int BinEvaluator::sumBin() {
 	
 	
 	int status,i,j;
@@ -33,7 +33,7 @@ int BinEvaluator::evalExpAndCounts() {
 			for(int j=0; j < image.cols; j++){
 					greyLevel = image.at<double>(i,j);
 					if(greyLevel>0 && agileMapUtils->SrcDist(i,j,l,b)<=radius){
-						photonsCount+=greyLevel;
+						binSum+=greyLevel;
 
 				}
 			}
