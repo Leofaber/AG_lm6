@@ -9,17 +9,20 @@
 
 
 #include "fitsio.h"
-#include <opencv2/core/core.hpp>
+//#include <opencv2/core/core.hpp>
 #include <string>
 #include <iostream>
 
-using namespace cv;
+//using namespace cv;
 using namespace std;
 
 class FitsToCvMatConverter
 {
 public:
-	static Mat convertFitsToCvMat(const char * fitsPath);
+	double * convertFitsToCvMat(const char * fitsPath); 		//static 
+	int rows;
+	int cols;
+	double ** image;
 private:
     FitsToCvMatConverter();
 

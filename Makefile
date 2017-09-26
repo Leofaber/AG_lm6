@@ -15,14 +15,14 @@
 #	* uninstall: add or remove the files and directories that should be uninstalled
 #############################################################################
 
-PROJECT= healpixGammaEventProject
+PROJECT= AG_lm6
 SHELL = /bin/sh
 
 ####### 1) Project names and system
 
 SYSTEM= $(shell gcc -dumpmachine)
 #ice, ctarta, mpi, cfitsio
-LINKERENV= cfitsio, pil, wcs, agile, opencv, healpix
+LINKERENV= cfitsio, pil, wcs, agile
 
 # Applications
 AG_EXE = AG_lm6
@@ -104,13 +104,6 @@ ifneq (, $(findstring wcs, $(LINKERENV)))
     endif
     LIBS += -L$(AGILE)/lib -lagilewcs
 endif
-ifneq (, $(findstring opencv, $(LINKERENV)))
-    ifeq (, $(findstring -I $(OPENCV)/include, $(CXXFLAGS)))
-        CXXFLAGS += -I $(OPENCV)/include 
-	CXXFLAGS += -std=c++11
-    endif
-    LIBS += -L$(OPENCV)/lib -lopencv_core -lopencv_highgui -lopencv_imgproc
-endif
 ifneq (, $(findstring pil, $(LINKERENV)))
     ifeq (,$(findstring -I $(AGILE)/include, $(CXXFLAGS)))
         CXXFLAGS += -I $(AGILE)/include
@@ -125,12 +118,7 @@ ifneq (, $(findstring cfitsio, $(LINKERENV)))
     CXXFLAGS += -I$(CFITSIO)/include
     LIBS += -L$(CFITSIO)/lib -lcfitsio
 endif
-ifneq (, $(findstring healpix, $(LINKERENV)))
-    ifeq (,$(findstring -I $(HEALPIX)/include, $(CXXFLAGS)))
-        CXXFLAGS += -I $(HEALPIX)/include
-    endif
-    LIBS += -L$(HEALPIX)/lib -lhealpix_cxx -lsharp -lfftpack -lcxxsupport -lc_utils
-endif
+
  
 LINK     = $(CXX)
 #for link

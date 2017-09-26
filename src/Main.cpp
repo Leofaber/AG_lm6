@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
 	double radius = params["radius"];
 	
 	const char * outfile = params["outfile"];
-
 /*
+
 	const char *ctsT0FilePath = "../MAPFORTEST/T0.cts.gz";
 	const char *expT0FilePath = "../MAPFORTEST/T0.exp.gz";
 	const char *ctsT1FilePath = "../MAPFORTEST/T1.cts.gz";
@@ -84,8 +84,8 @@ int main(int argc, char *argv[])
 	double radius = 10;
 	
 	const char * outfile = "../outfile.txt";
-*/
 
+*/
     	ofstream resText(outfile);
     	resText.setf(ios::fixed); 
 	
@@ -95,11 +95,34 @@ int main(int argc, char *argv[])
 
  
 	BinEvaluator expT0(expT0FilePath,l,b,radius);
+	if(! expT0.convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "expT0 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
+
 	statusExp = expT0.sumBin();
+	if(statusExp != 0)
+	{
+		fprintf(stderr,"expT0 Error: the radius exceeds the border of the .exp map\n");
+		exit (EXIT_FAILURE);
+	}
+
  
 	BinEvaluator ctsT0(ctsT0FilePath,l,b,radius);
+	if(! ctsT0.convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "ctsT0 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
+
 	statusCts = ctsT0.sumBin();
- 
+ 	if(statusCts != 0)
+	{
+		fprintf(stderr,"ctsT0 Error: the radius exceeds the border of the .cts map\n");
+		exit (EXIT_FAILURE);
+	}
+
 	if(statusCts == 0 && statusExp == 0) {
 		resText << setprecision(1);
 		resText << ctsT0.tmin << " " << ctsT0.tmax << " ";
@@ -107,72 +130,95 @@ int main(int argc, char *argv[])
 		resText << ctsT0.binSum << " " << expT0.binSum << " ";
 		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
 	}
-	else if(statusCts != 0){
-		cout <<"Error: the radius exceeds the border of the .cts map" << endl;
-		return statusCts;
-	}
-	else if(statusExp != 0){
-		cout <<"Error: the radius exceeds the border of the .exp map" << endl;
-		return statusExp;
-	}
+	
+	
 
  
 	
 
 	// ANALYSIS OF MAP T1
-	
-	BinEvaluator ctsT1(ctsT1FilePath,l,b,radius);
-	statusCts = ctsT1.sumBin();
-	
 	BinEvaluator expT1(expT1FilePath,l,b,radius);
+	if(! expT1.convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "expT1 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
+
 	statusExp = expT1.sumBin();
+	if(statusExp != 0)
+	{
+		fprintf(stderr,"expT1 Error: the radius exceeds the border of the .exp map\n");
+		exit (EXIT_FAILURE);
+	}
+
+ 
+	BinEvaluator ctsT1(ctsT1FilePath,l,b,radius);
+	if(! ctsT1.convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "ctsT1 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
+
+	statusCts = ctsT1.sumBin();
+ 	if(statusCts != 0)
+	{
+		fprintf(stderr,"ctsT1 Error: the radius exceeds the border of the .cts map\n");
+		exit (EXIT_FAILURE);
+	}
 
 	if(statusCts == 0 && statusExp == 0) {
 		resText << setprecision(1);
 		resText << ctsT1.tmin << " " << ctsT1.tmax << " ";
 		resText << setprecision(2);
-		resText << ctsT1.binSum<< " " << expT1.binSum << " ";
+		resText << ctsT1.binSum << " " << expT1.binSum << " ";
+		resText << setprecision(10) << ctsT1.binSum / (double) expT1.binSum << " ";
+	}
 
-	}
-	else if(statusCts != 0){
-		cout <<"Error: the radius exceeds the border of the .cts map" << endl;
-		return statusCts;
-	}
-	else if(statusExp != 0){
-		cout <<"Error: the radius exceeds the border of the .exp map" << endl;
-		return statusExp;
-	}
-	
+
+	 
 	// ANALYSIS OF MAP T2
-	
-	BinEvaluator ctsT2(ctsT2FilePath,l,b,radius);
-	statusCts = ctsT2.sumBin();
-	
 	BinEvaluator expT2(expT2FilePath,l,b,radius);
-	statusExp = expT2.sumBin();
+	if(! expT2.convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "expT2 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
 
+	statusExp = expT2.sumBin();
+	if(statusExp != 0)
+	{
+		fprintf(stderr,"expT2 Error: the radius exceeds the border of the .exp map\n");
+		exit (EXIT_FAILURE);
+	}
+
+ 
+	BinEvaluator ctsT2(ctsT2FilePath,l,b,radius);
+	if(! ctsT2.convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "ctsT2 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
+
+	statusCts = ctsT2.sumBin();
+ 	if(statusCts != 0)
+	{
+		fprintf(stderr,"ctsT2 Error: the radius exceeds the border of the .cts map\n");
+		exit (EXIT_FAILURE);
+	}
 
 	if(statusCts == 0 && statusExp == 0) {
 		resText << setprecision(1);
 		resText << ctsT2.tmin << " " << ctsT2.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT2.binSum << " " << expT2.binSum << " ";
+		resText << setprecision(10) << ctsT2.binSum / (double) expT2.binSum << " ";
+	}
 
-	}
-	else if(statusCts != 0){
-		cout <<"Error: the radius exceeds the border of the .cts map" << endl;
-		return statusCts;
-	}
-	else if(statusExp != 0){
-		cout <<"Error: the radius exceeds the border of the .exp map" << endl;
-		return statusExp;
-	}
-	
 
+	//cout << ctsT0.binSum <<" "<<ctsT1.binSum <<" "<<ctsT2.binSum <<" "<<expT0.binSum <<" "<<expT1.binSum <<" "<<expT2.binSum<<endl;
 
 	// LI&MA Analysis
-	
- 	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,expT0.binSum,expT1.binSum,expT2.binSum);
+	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,expT0.binSum,expT1.binSum,expT2.binSum);
 	double S = lm.computeLiMiValue();
 
 

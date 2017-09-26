@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2017
- *     Andrea Bulgarelli, Andrea Zoli (IASF-Bologna),
+ *    Leonardo Baroncelli, Giancarlo Zollino (IASF-Bologna),
  *
  * Any information contained in this software
  * is property of the AGILE TEAM and is strictly
@@ -12,7 +12,8 @@
 #define EVALUATOR_H
 
 #include <AgileMap.h>
-#include "FitsToCvMatConverter.h"
+#include <fitsio.h>
+
  
 using namespace std;
 
@@ -23,12 +24,20 @@ class BinEvaluator {
 		bool isRadiusInside();
 
 		const char * fitsFilePath;
-		Mat image; 
 		double l, b, radius;
+		int x, y;
 		double binSum;
 		double tmin;
 		double tmax;
 		AgileMap * agileMapUtils;
+
+		// We convert fits data into a matrix of double
+
+		bool convertFitsDataToMatrix(); 		
+		int rows;
+		int cols;
+		double ** image;
+
 		
 		
 };

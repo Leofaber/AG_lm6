@@ -1,4 +1,11 @@
-
+/*
+ * Copyright (c) 2017
+ *     Leonardo Baroncelli, Giancarlo Zollino (IASF-Bologna),
+ *
+ * Any information contained in this software
+ * is property of the AGILE TEAM and is strictly
+ * private and confidential.
+*/
 #include "LiMa.h"
 
 
