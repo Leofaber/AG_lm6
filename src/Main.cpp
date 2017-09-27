@@ -171,7 +171,6 @@ int main(int argc, char *argv[])
 		resText << ctsT1.tmin << " " << ctsT1.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT1.binSum << " " << expT1.binSum << " ";
-		resText << setprecision(10) << ctsT1.binSum / (double) expT1.binSum << " ";
 	}
 
 
@@ -211,7 +210,7 @@ int main(int argc, char *argv[])
 		resText << ctsT2.tmin << " " << ctsT2.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT2.binSum << " " << expT2.binSum << " ";
-		resText << setprecision(10) << ctsT2.binSum / (double) expT2.binSum << " ";
+		
 	}
 
 
