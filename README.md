@@ -16,8 +16,8 @@ Per eseguire il programma si deve entrare nella cartella /bin e chiamare l'esegu
   	
   	(Opzionali)
   	
-  * minTreshol (0 di default)
-  * maxTreshol (100 di default)    
+  * minTreshold (0 di default)
+  * maxTreshold (100 di default)    
 
   Output:                                           Example:
   
