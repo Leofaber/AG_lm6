@@ -19,6 +19,7 @@
 #include <PilParams.h>
 #include "BinEvaluator.h"
 #include "LiMa.h"
+#include "ExpRatioEvaluator.h"
 
 using namespace std; 
 
@@ -42,7 +43,7 @@ const PilDescription paramsDescr[] = {
     { PilString, "expT2", "Input T2 exp file name" },
     { PilReal, "l", "Longitude of GRB centroid (galactic)" },
     { PilReal, "b", "Latitude of GRB centroid (galactic)" },
-    { PilReal, "radius", "Li&Ma radius of analysis" },   
+    { PilReal, "radius", "Li&Ma radius of analysis" }, 
     { PilNone, "", "" }
 };
 
@@ -51,11 +52,19 @@ const PilDescription paramsDescr[] = {
 int main(int argc, char *argv[])
 {
     cout << startString << endl;
-	int statusCts = 0;
-	int statusExp = 0;
+	
+
+    float minTreshold = 0;
+    float maxTreshold = 100;
+
     
-    PilParams params(paramsDescr);
-   
+	if(argc > 11) {
+		cout << "lol" << endl;
+		minTreshold = atof(argv[11]);
+		maxTreshold = atof(argv[12]);
+	}
+	
+	PilParams params(paramsDescr);
     if (!params.Load(argc, argv))
         return EXIT_FAILURE;
      
@@ -69,6 +78,8 @@ int main(int argc, char *argv[])
 	double l = params["l"];
 	double b = params["b"];
 	double radius = params["radius"];
+ 
+ 
 	
 	const char * outfile = params["outfile"];
 /*
@@ -86,10 +97,21 @@ int main(int argc, char *argv[])
 	const char * outfile = "../outfile.txt";
 
 */
-    	ofstream resText(outfile);
-    	resText.setf(ios::fixed); 
-	
-    
+   	ofstream resText(outfile);
+   	resText.setf(ios::fixed); 
+
+	int statusCts = 0;
+	int statusExp = 0;
+
+    // EXPRATIOEVALUATOR OF EXPTO
+	ExpRatioEvaluator expRatioT0(expT0FilePath,minTreshold ,maxTreshold,l,b); 
+	double *outputT0 = expRatioT0.computeExpRatioValues(); 
+	if(expRatioT0.isRectangleInside()) {
+		cout << "ExpRatioEvaluator of expT0:" << endl;
+		for(int i=0; i<4; i++) {
+			cout << outputT0[i] << endl;
+			}
+		}
 	 
 	// ANALYSIS OF SOURCE MAP T0
 
@@ -129,12 +151,24 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT0.binSum << " " << expT0.binSum << " ";
 		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
+		resText << setprecision(5);
+		resText << outputT0[0] << " " << outputT0[1] << " " << outputT0[2] << " " << outputT0[3] << " ";
 	}
 	
 	
-
- 
 	
+	
+	
+ 
+	// EXPRATIOEVALUATOR OF EXPT1
+	ExpRatioEvaluator expRatioT1(expT1FilePath,minTreshold ,maxTreshold,l,b);
+	double *outputT1 = expRatioT1.computeExpRatioValues(); 
+	if(expRatioT1.isRectangleInside()) {
+		cout << "ExpRatioEvaluator of expT1:" << endl;
+		for(int i=0; i<4; i++) {
+			cout << outputT1[i] << endl;
+			}
+		}
 
 	// ANALYSIS OF MAP T1
 	BinEvaluator expT1(expT1FilePath,l,b,radius);
@@ -171,8 +205,20 @@ int main(int argc, char *argv[])
 		resText << ctsT1.tmin << " " << ctsT1.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT1.binSum << " " << expT1.binSum << " ";
+		resText << setprecision(5);
+		resText << outputT1[0] << " " << outputT1[1] << " " << outputT1[2] << " " << outputT1[3] << " ";
 	}
-
+	
+	
+	// EXPRATIOEVALUATOR OF EXP T2
+	ExpRatioEvaluator expRatioT2(expT2FilePath,minTreshold ,maxTreshold,l,b);
+	double *outputT2 = expRatioT2.computeExpRatioValues(); 
+	if(expRatioT2.isRectangleInside()) {
+		cout << "ExpRatioEvaluator of expT2: "<< endl;
+		for(int i=0; i<4; i++) {
+			cout << outputT2[i] << endl;
+			}
+		}
 
 	 
 	// ANALYSIS OF MAP T2
@@ -210,15 +256,26 @@ int main(int argc, char *argv[])
 		resText << ctsT2.tmin << " " << ctsT2.tmax << " ";
 		resText << setprecision(2);
 		resText << ctsT2.binSum << " " << expT2.binSum << " ";
+		resText << setprecision(5);
+		resText << outputT2[0] << " " << outputT2[1] << " " << outputT2[2] << " " << outputT2[3] << " ";
 		
 	}
+	
+	
 
 
 	//cout << ctsT0.binSum <<" "<<ctsT1.binSum <<" "<<ctsT2.binSum <<" "<<expT0.binSum <<" "<<expT1.binSum <<" "<<expT2.binSum<<endl;
 
 	// LI&MA Analysis
+	double S;
+	cout << "\nLI&MA Analysis: " << endl;
 	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,expT0.binSum,expT1.binSum,expT2.binSum);
-	double S = lm.computeLiMiValue();
+	if(expRatioT0.isRectangleInside() || expRatioT1.isRectangleInside() || expRatioT2.isRectangleInside()) { 
+		S = lm.computeLiMiValue();
+	}else{
+		S=-1;
+	}
+	
 
 
 	resText << lm.alpha << " " << std::setprecision(2)  << " off " << lm.bkg << " " << lm.expBgSum << " " << std::setprecision(10) << lm.bkg / (double) (lm.expBgSum)<< " " << S << endl;	//resText << SA << endl;
