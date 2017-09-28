@@ -12,7 +12,12 @@ Per eseguire il programma si deve entrare nella cartella /bin e chiamare l'esegu
   * Path to T2,exp
   * Galactic longitude of GRB centroid
   * Galactic latitude of GRB centroid
-  * Li&Ma radius of analysis   
+  * Li&Ma radius of analysis
+  	
+  	(Opzionali)
+  	
+  * minTreshol (0 di default)
+  * maxTreshol (100 di default)    
 
   Output:                                           Example:
   
