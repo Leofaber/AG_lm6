@@ -105,14 +105,14 @@ int main(int argc, char *argv[])
 
 	int statusCts = 0;
 	int statusExp = 0;
-
+	
 
     // EXPRATIOEVALUATOR OF EXPTO
 	
 	ExpRatioEvaluator expRatioT0(expT0FilePath,minTreshold ,maxTreshold,l,b); 
 	double *expRatioArrayT0 = expRatioT0.computeExpRatioValues(); 
 	if(expRatioArrayT0[0]!=-1) {
-		cout << "ExpRatio evaluation of expT0: " << expRatioArrayT0[0]<< endl;		
+		cout << "ExpRatio evaluation of expT0: " << (int)round(expRatioArrayT0[0])<< endl;		
 	}
 	 
 		
@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT0.binSum << " " << expT0.binSum << " ";
 		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
-		resText << setprecision(5);
-		resText << expRatioArrayT0[0] << " " << expRatioArrayT0[1] << " " << expRatioArrayT0[2] << " " << expRatioArrayT0[3] << " ";
+		resText << setprecision(5); 
+		resText << (int)round(expRatioArrayT0[0]) << " " << expRatioArrayT0[1] << " " << expRatioArrayT0[2] << " " << expRatioArrayT0[3] << " ";
 	}
 	
 	
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
 	ExpRatioEvaluator expRatioT1(expT1FilePath,minTreshold ,maxTreshold,l,b);
 	double *expRatioArrayT1 = expRatioT1.computeExpRatioValues(); 
 	if(expRatioArrayT1[0]!=-1) {
-		cout << "ExpRatio evaluation of expT1: " << expRatioArrayT1[0]<< endl;		
+		cout << "ExpRatio evaluation of expT1: " << (int)round(expRatioArrayT1[0])<< endl;		
 	}
 
 	// ANALYSIS OF MAP T1
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT1.binSum << " " << expT1.binSum << " ";
 		resText << setprecision(5);
-		resText << expRatioArrayT1[0] << " " << expRatioArrayT1[1] << " " << expRatioArrayT1[2] << " " << expRatioArrayT1[3] << " ";
+		resText << (int)round(expRatioArrayT1[0]) << " " << expRatioArrayT1[1] << " " << expRatioArrayT1[2] << " " << expRatioArrayT1[3] << " ";
 	}
 	
 	
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 	ExpRatioEvaluator expRatioT2(expT2FilePath,minTreshold ,maxTreshold,l,b);
 	double *expRatioArrayT2 = expRatioT2.computeExpRatioValues(); 
 	if(expRatioArrayT2[0]!=-1) {
-		cout << "ExpRatio evaluation of expT2: " << expRatioArrayT2[0]<< endl;		
+		cout << "ExpRatio evaluation of expT2: " << (int)round(expRatioArrayT2[0])<< endl;		
 	}
 
 	 
@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT2.binSum << " " << expT2.binSum << " ";
 		resText << setprecision(5);
-		resText << expRatioArrayT2[0] << " " << expRatioArrayT2[1] << " " << expRatioArrayT2[2] << " " << expRatioArrayT2[3] << " ";
+		resText << (int)round(expRatioArrayT2[0]) << " " << expRatioArrayT2[1] << " " << expRatioArrayT2[2] << " " << expRatioArrayT2[3] << " ";
 		
 	}
 	
