@@ -1,4 +1,4 @@
-# AG_lm6 1.0.1
+# AG_lm6 1.0.3
 
 Per eseguire il programma si deve entrare nella cartella /bin e chiamare l'eseguibile altrimenti non trova il file .par
 
