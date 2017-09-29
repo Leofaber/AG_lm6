@@ -1,20 +1,23 @@
 /*
  * Copyright (c) 2017
- *     Andrea Bulgarelli, Andrea Zoli (IASF-Bologna),
+ 	Leonardo Baroncelli, Giancarlo Zollino (IASF-Bologna),
  *
  * Any information contained in this software
  * is property of the AGILE TEAM and is strictly
  * private and confidential.
  *
- *	Output: 
-	tstart T0, tstop T0, numero di fotoni T0, numero fotoni esposizione T0, fotoni/esposizione T0 ,tstart T1, tstop T1, numero di fotoni  		T1, numero fotoni esposizione T1,tstart T2, tstop T2, numero di fotoni T2, numero fotoni esposizione T2, off , somma delle due mappe 		di bkg (T1 e T2) come fotoni e exp, Li&Ma
+ * Output: 
+ * tstart T0, tstop T0, numero di fotoni T0, numero fotoni esposizione T0, fotoni/esposizione T0, exp-ratioT0,
+ * tstart T1, tstop T1,  numero di *fotoni T1, numero fotoni esposizione T1, exp-ratioT1,
+ * tstart T2, tstop T2, numero di fotoni T2, numero fotoni esposizione T2, exp-ratioT2,
+ * off , somma delle due mappe di bkg (T1 e T2) come fotoni e exp, Li&Ma
 */
 
 #include <iostream>
 #include <fstream>
 #include <string.h>
 
-//#define DEBUG 1
+ 
 
 #include <PilParams.h>
 #include "BinEvaluator.h"
@@ -25,7 +28,7 @@ using namespace std;
 
 const char* startString = {
 "################################################################\n"
-"###                   Task AG_lm6 v1.0.0 -               ###"
+"###                   Task AG_lm6 v1.0.3 -               ###"
 };
 
 const char* endString = {
@@ -59,7 +62,7 @@ int main(int argc, char *argv[])
 
     
 	if(argc > 11) {
-		cout << "lol" << endl;
+ 
 		minTreshold = atof(argv[11]);
 		maxTreshold = atof(argv[12]);
 	}
@@ -82,8 +85,8 @@ int main(int argc, char *argv[])
  
 	
 	const char * outfile = params["outfile"];
-/*
-
+	
+	/* FOR TESTING PURPOSES	
 	const char *ctsT0FilePath = "../MAPFORTEST/T0.cts.gz";
 	const char *expT0FilePath = "../MAPFORTEST/T0.exp.gz";
 	const char *ctsT1FilePath = "../MAPFORTEST/T1.cts.gz";
@@ -93,29 +96,28 @@ int main(int argc, char *argv[])
 	double l = 45;
 	double b = 30;
 	double radius = 10;
-	
 	const char * outfile = "../outfile.txt";
+	*/
 
-*/
+
    	ofstream resText(outfile);
    	resText.setf(ios::fixed); 
 
 	int statusCts = 0;
 	int statusExp = 0;
 
-    // EXPRATIOEVALUATOR OF EXPTO
-	ExpRatioEvaluator expRatioT0(expT0FilePath,minTreshold ,maxTreshold,l,b); 
-	double *outputT0 = expRatioT0.computeExpRatioValues(); 
-	if(expRatioT0.isRectangleInside()) {
-		cout << "ExpRatioEvaluator of expT0:" << endl;
-		for(int i=0; i<4; i++) {
-			cout << outputT0[i] << endl;
-			}
-		}
-	 
-	// ANALYSIS OF SOURCE MAP T0
 
- 
+    // EXPRATIOEVALUATOR OF EXPTO
+	
+	ExpRatioEvaluator expRatioT0(expT0FilePath,minTreshold ,maxTreshold,l,b); 
+	double *expRatioArrayT0 = expRatioT0.computeExpRatioValues(); 
+	if(expRatioArrayT0[0]!=-1) {
+		cout << "ExpRatio evaluation of expT0: " << expRatioArrayT0[0]<< endl;		
+	}
+	 
+		
+	// ANALYSIS OF SOURCE MAP T0
+ 	// Exp
 	BinEvaluator expT0(expT0FilePath,l,b,radius);
 	if(! expT0.convertFitsDataToMatrix() )
 	{
@@ -129,8 +131,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr,"expT0 Error: the radius exceeds the border of the .exp map\n");
 		exit (EXIT_FAILURE);
 	}
-
- 
+ 	// Cts
 	BinEvaluator ctsT0(ctsT0FilePath,l,b,radius);
 	if(! ctsT0.convertFitsDataToMatrix() )
 	{
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
 		resText << ctsT0.binSum << " " << expT0.binSum << " ";
 		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
 		resText << setprecision(5);
-		resText << outputT0[0] << " " << outputT0[1] << " " << outputT0[2] << " " << outputT0[3] << " ";
+		resText << expRatioArrayT0[0] << " " << expRatioArrayT0[1] << " " << expRatioArrayT0[2] << " " << expRatioArrayT0[3] << " ";
 	}
 	
 	
@@ -161,16 +162,15 @@ int main(int argc, char *argv[])
 	
  
 	// EXPRATIOEVALUATOR OF EXPT1
+
 	ExpRatioEvaluator expRatioT1(expT1FilePath,minTreshold ,maxTreshold,l,b);
-	double *outputT1 = expRatioT1.computeExpRatioValues(); 
-	if(expRatioT1.isRectangleInside()) {
-		cout << "ExpRatioEvaluator of expT1:" << endl;
-		for(int i=0; i<4; i++) {
-			cout << outputT1[i] << endl;
-			}
-		}
+	double *expRatioArrayT1 = expRatioT1.computeExpRatioValues(); 
+	if(expRatioArrayT1[0]!=-1) {
+		cout << "ExpRatio evaluation of expT1: " << expRatioArrayT1[0]<< endl;		
+	}
 
 	// ANALYSIS OF MAP T1
+
 	BinEvaluator expT1(expT1FilePath,l,b,radius);
 	if(! expT1.convertFitsDataToMatrix() )
 	{
@@ -206,22 +206,21 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT1.binSum << " " << expT1.binSum << " ";
 		resText << setprecision(5);
-		resText << outputT1[0] << " " << outputT1[1] << " " << outputT1[2] << " " << outputT1[3] << " ";
+		resText << expRatioArrayT1[0] << " " << expRatioArrayT1[1] << " " << expRatioArrayT1[2] << " " << expRatioArrayT1[3] << " ";
 	}
 	
 	
 	// EXPRATIOEVALUATOR OF EXP T2
+
 	ExpRatioEvaluator expRatioT2(expT2FilePath,minTreshold ,maxTreshold,l,b);
-	double *outputT2 = expRatioT2.computeExpRatioValues(); 
-	if(expRatioT2.isRectangleInside()) {
-		cout << "ExpRatioEvaluator of expT2: "<< endl;
-		for(int i=0; i<4; i++) {
-			cout << outputT2[i] << endl;
-			}
-		}
+	double *expRatioArrayT2 = expRatioT2.computeExpRatioValues(); 
+	if(expRatioArrayT2[0]!=-1) {
+		cout << "ExpRatio evaluation of expT2: " << expRatioArrayT2[0]<< endl;		
+	}
 
 	 
 	// ANALYSIS OF MAP T2
+
 	BinEvaluator expT2(expT2FilePath,l,b,radius);
 	if(! expT2.convertFitsDataToMatrix() )
 	{
@@ -257,7 +256,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT2.binSum << " " << expT2.binSum << " ";
 		resText << setprecision(5);
-		resText << outputT2[0] << " " << outputT2[1] << " " << outputT2[2] << " " << outputT2[3] << " ";
+		resText << expRatioArrayT2[0] << " " << expRatioArrayT2[1] << " " << expRatioArrayT2[2] << " " << expRatioArrayT2[3] << " ";
 		
 	}
 	
@@ -270,7 +269,8 @@ int main(int argc, char *argv[])
 	double S;
 	cout << "\nLI&MA Analysis: " << endl;
 	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,expT0.binSum,expT1.binSum,expT2.binSum);
-	if(expRatioT0.isRectangleInside() || expRatioT1.isRectangleInside() || expRatioT2.isRectangleInside()) { 
+	
+	if(expRatioArrayT0[0] != -1 && expRatioArrayT1[0] != -1 && expRatioArrayT2[0] != -1) { 
 		S = lm.computeLiMiValue();
 	}else{
 		S=-1;
