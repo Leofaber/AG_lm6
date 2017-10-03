@@ -28,7 +28,7 @@ using namespace std;
 
 const char* startString = {
 "################################################################\n"
-"###                   Task AG_lm6 v1.0.3 -               ###"
+"###                   Task AG_lm6 v1.0.4 -               ###"
 };
 
 const char* endString = {
@@ -63,7 +63,6 @@ int main(int argc, char *argv[])
     if(argc > 12) {
  		minTreshold = atof(argv[12]);
 		maxTreshold = atof(argv[13]);
-		cout << "MinThreshold and MaxThreshold have been modified" << endl;
 	}
 		
 	PilParams params(paramsDescr);
@@ -84,14 +83,10 @@ int main(int argc, char *argv[])
 
 	bool doNormalization;
 	
-	if( strcmp(normalize, "true") == 0 ){
+	if( strcmp(normalize, "true") == 0 )
 		doNormalization = true;
-		cout << "ExpRatioEvaluator will perform a normalization of the exp maps" << endl;	
-	}	
-	else{
+	else
 		doNormalization = false;
-		cout << "ExpRatioEvaluator will NOT perform a normalization of the exp maps" << endl;
-	}
 			
 	
   /*	 FOR TESTING PURPOSES	
