@@ -1,4 +1,4 @@
-# AG_lm6 1.0.4
+# AG_lm6 1.0.5
 
 Se il software non è installato, per eseguirlo si deve entrare nella cartella /bin altrimenti non trova il file .par
 
