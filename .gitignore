@@ -50,3 +50,5 @@ MAPFORTEST/*
 *.swp
 *.save
 version
+include/ExpRatioEvaluator.h
+src/ExpRatioEvaluator.cpp

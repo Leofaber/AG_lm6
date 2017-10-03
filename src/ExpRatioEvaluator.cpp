@@ -8,12 +8,15 @@
 */
 
 #include "ExpRatioEvaluator.h"
+//#include "Eval.h"
 
 using namespace std; 
 
-ExpRatioEvaluator::ExpRatioEvaluator(const char * _expPath, double _minThreshold, double _maxThreshold, double _l, double _b) 
+ExpRatioEvaluator::ExpRatioEvaluator(const char * _expPath, bool _normalize, double _minThreshold, double _maxThreshold, double _l, double _b) 
 {
 	expPath=_expPath;
+	normalize=_normalize;
+	normalizationFactor = 1;
 	minThreshold=_minThreshold;
 	maxThreshold=_maxThreshold;
 	l=_l;
@@ -21,10 +24,21 @@ ExpRatioEvaluator::ExpRatioEvaluator(const char * _expPath, double _minThreshold
 	x=0;
 	y=0;	
 	agileMap=new AgileMap(expPath);
+	tStart=agileMap->GetTstart();
+	tStop=agileMap->GetTstop();
+	timeFactor=tStop-tStart;
+	spatialFactor;
 	double cdelt2=agileMap->GetYbin();
 	size = 10/cdelt2;
 	
+	if(normalize==true) {
+		spatialFactor = 0.0003046174197867085688996857673060958405*cdelt2*cdelt2;
+		normalizationFactor = spatialFactor*timeFactor;
+	}
+		
+			
 } 
+
 
 bool ExpRatioEvaluator::convertFitsDataToMatrix()
 {
@@ -79,7 +93,9 @@ bool ExpRatioEvaluator::convertFitsDataToMatrix()
 
 						for (ii = 0; ii < naxes[0]; ii++)
 						{
-							image[row_index][col_index] = (double)pixels[ii];
+							
+							image[row_index][col_index] = (double)pixels[ii]/normalizationFactor;
+							
 							col_index++;
 						}
 						col_index = 0;
@@ -163,16 +179,16 @@ double* ExpRatioEvaluator::computeExpRatioValues()
 			}
 		}
 	
-		output[0] = ((1-nBad/totCount)*100);
-		output[1] = nBad;
+		output[0] = (1-(nBad/totCount))*100;
+		/*output[1] = nBad;
 		output[2] = totCount;
-		output[3] = greyLevelSum/totCount;	
+		output[3] = greyLevelSum/totCount;	*/
 		return output;
 
 	}else 
 	{
 		fprintf( stderr, "Rectangle is not completely inside!\n");
-		output[0] = output[1] = output[2] = output[3] = -1;
+		output[0] =  -1; //output[1] = output[2] = output[3] =
 		return output;
 
 	}

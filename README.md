@@ -1,6 +1,6 @@
-# AG_lm6 1.0.3
+# AG_lm6 1.0.4
 
-Per eseguire il programma si deve entrare nella cartella /bin e chiamare l'eseguibile altrimenti non trova il file .par
+Se il software non è installato, per eseguirlo si deve entrare nella cartella /bin altrimenti non trova il file .par
 
   Input:
   * Output file name
@@ -13,6 +13,7 @@ Per eseguire il programma si deve entrare nella cartella /bin e chiamare l'esegu
   * Galactic longitude of GRB centroid
   * Galactic latitude of GRB centroid
   * Li&Ma radius of analysis
+  * true/false: if true, ExpRatioEvaluator will perform a normalization of the exp maps 
   	
   	(Opzionali)
   	
@@ -26,28 +27,19 @@ Per eseguire il programma si deve entrare nella cartella /bin e chiamare l'esegu
   * numero di fotoni T0.............................2.00
   * numero fotoni esposizione T0  (expBinSumT0).....7151.20
   * fotoni/esposizione T0...........................0.0002796734
-  * exp-ratio-T0....................................0.00000
-  * nBadT0..........................................0.00000
-  * totCountT0......................................1681.00000
-  * greyLevelSum/totCountT0.........................5.63296
-  
+  * exp-ratio-T0....................................100
+    
   * tstart T1.......................................416529609.0
   * tstop T1........................................416530609.0
   * numero di fotoni T1           (ctsBinSumT1).....1.00
   * numero fotoni esposizione T1  (expBinSumT1).....7151.20
-  * exp-ratio-T1....................................0.00000
-  * nBadT1..........................................0.00000
-  * totCountT1......................................1681.00000
-  * greyLevelSum/totCountT1.........................5.63296
-  
+  * exp-ratio-T1....................................100
+    
   * tstart T2.......................................416529609.0
   * tstop T2........................................416530609.0
   * numero di fotoni T2           (ctsBinSumT2).....1.00
   * numero fotoni esposizione T2  (expBinSumT2).....7151.20
-  * exp-ratio-T2.,,,................................0.00000
-  * nBadT2..........................................0.00000
-  * totCountT2......................................1681.00000
-  * greyLevelSum/totCountT2.........................5.63296
+  * exp-ratio-T2.,,,................................100
   
   * alpha = expBinSumT0 / expBgSum..................0.50
   * off = ctsBinSumT1 + ctsBinSumT2.................off 2

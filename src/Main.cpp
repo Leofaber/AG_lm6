@@ -47,6 +47,7 @@ const PilDescription paramsDescr[] = {
     { PilReal, "l", "Longitude of GRB centroid (galactic)" },
     { PilReal, "b", "Latitude of GRB centroid (galactic)" },
     { PilReal, "radius", "Li&Ma radius of analysis" }, 
+    { PilString, "normalize", "true if exp should be normalized, false otherwise" },
     { PilNone, "", "" }
 };
 
@@ -55,23 +56,21 @@ const PilDescription paramsDescr[] = {
 int main(int argc, char *argv[])
 {
     cout << startString << endl;
-	
-
-    float minTreshold = 0;
-    float maxTreshold = 100;
-
     
-	if(argc > 11) {
- 
-		minTreshold = atof(argv[11]);
-		maxTreshold = atof(argv[12]);
+	float minTreshold = 0;
+	float maxTreshold = 100;
+
+    if(argc > 12) {
+ 		minTreshold = atof(argv[12]);
+		maxTreshold = atof(argv[13]);
+		cout << "MinThreshold and MaxThreshold have been modified" << endl;
 	}
-	
+		
 	PilParams params(paramsDescr);
     if (!params.Load(argc, argv))
         return EXIT_FAILURE;
-     
-
+   
+	const char * outfile = params["outfile"];
 	const char *ctsT0FilePath = params["ctsT0"];
 	const char *expT0FilePath = params["expT0"];
 	const char *ctsT1FilePath = params["ctsT1"];
@@ -80,13 +79,22 @@ int main(int argc, char *argv[])
 	const char *expT2FilePath = params["expT2"];
 	double l = params["l"];
 	double b = params["b"];
-	double radius = params["radius"];
- 
- 
+	double radius = params["radius"]; 
+	const char *normalize = params["normalize"];
+
+	bool doNormalization;
 	
-	const char * outfile = params["outfile"];
+	if( strcmp(normalize, "true") == 0 ){
+		doNormalization = true;
+		cout << "ExpRatioEvaluator will perform a normalization of the exp maps" << endl;	
+	}	
+	else{
+		doNormalization = false;
+		cout << "ExpRatioEvaluator will NOT perform a normalization of the exp maps" << endl;
+	}
+			
 	
-	/* FOR TESTING PURPOSES	
+  /*	 FOR TESTING PURPOSES	
 	const char *ctsT0FilePath = "../MAPFORTEST/T0.cts.gz";
 	const char *expT0FilePath = "../MAPFORTEST/T0.exp.gz";
 	const char *ctsT1FilePath = "../MAPFORTEST/T1.cts.gz";
@@ -97,11 +105,14 @@ int main(int argc, char *argv[])
 	double b = 30;
 	double radius = 10;
 	const char * outfile = "../outfile.txt";
-	*/
-
+	
+*/
 
    	ofstream resText(outfile);
    	resText.setf(ios::fixed); 
+
+
+
 
 	int statusCts = 0;
 	int statusExp = 0;
@@ -109,7 +120,7 @@ int main(int argc, char *argv[])
 
     // EXPRATIOEVALUATOR OF EXPTO
 	
-	ExpRatioEvaluator expRatioT0(expT0FilePath,minTreshold ,maxTreshold,l,b); 
+	ExpRatioEvaluator expRatioT0(expT0FilePath,doNormalization,minTreshold ,maxTreshold,l,b); 
 	double *expRatioArrayT0 = expRatioT0.computeExpRatioValues(); 
 	if(expRatioArrayT0[0]!=-1) {
 		cout << "ExpRatio evaluation of expT0: " << (int)round(expRatioArrayT0[0])<< endl;		
@@ -153,7 +164,7 @@ int main(int argc, char *argv[])
 		resText << ctsT0.binSum << " " << expT0.binSum << " ";
 		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
 		resText << setprecision(5); 
-		resText << (int)round(expRatioArrayT0[0]) << " " << expRatioArrayT0[1] << " " << expRatioArrayT0[2] << " " << expRatioArrayT0[3] << " ";
+		resText << (int)round(expRatioArrayT0[0]) << " ";
 	}
 	
 	
@@ -163,7 +174,7 @@ int main(int argc, char *argv[])
  
 	// EXPRATIOEVALUATOR OF EXPT1
 
-	ExpRatioEvaluator expRatioT1(expT1FilePath,minTreshold ,maxTreshold,l,b);
+	ExpRatioEvaluator expRatioT1(expT1FilePath,doNormalization,minTreshold ,maxTreshold,l,b);
 	double *expRatioArrayT1 = expRatioT1.computeExpRatioValues(); 
 	if(expRatioArrayT1[0]!=-1) {
 		cout << "ExpRatio evaluation of expT1: " << (int)round(expRatioArrayT1[0])<< endl;		
@@ -206,13 +217,13 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT1.binSum << " " << expT1.binSum << " ";
 		resText << setprecision(5);
-		resText << (int)round(expRatioArrayT1[0]) << " " << expRatioArrayT1[1] << " " << expRatioArrayT1[2] << " " << expRatioArrayT1[3] << " ";
+		resText << (int)round(expRatioArrayT1[0]) << " ";
 	}
 	
 	
 	// EXPRATIOEVALUATOR OF EXP T2
 
-	ExpRatioEvaluator expRatioT2(expT2FilePath,minTreshold ,maxTreshold,l,b);
+	ExpRatioEvaluator expRatioT2(expT2FilePath,doNormalization,minTreshold ,maxTreshold,l,b);
 	double *expRatioArrayT2 = expRatioT2.computeExpRatioValues(); 
 	if(expRatioArrayT2[0]!=-1) {
 		cout << "ExpRatio evaluation of expT2: " << (int)round(expRatioArrayT2[0])<< endl;		
@@ -256,7 +267,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(2);
 		resText << ctsT2.binSum << " " << expT2.binSum << " ";
 		resText << setprecision(5);
-		resText << (int)round(expRatioArrayT2[0]) << " " << expRatioArrayT2[1] << " " << expRatioArrayT2[2] << " " << expRatioArrayT2[3] << " ";
+		resText << (int)round(expRatioArrayT2[0]) << " ";
 		
 	}
 	

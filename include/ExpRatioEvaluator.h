@@ -2,6 +2,22 @@
 #include <stdlib.h> 
 #include "fitsio.h" 
 #include "AgileMap.h"
+#include "Eval.h"
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cmath>
+#include <cstring>
+#include <prj.h>
+#include <wcstrig.h>
+#include <sph.h>
+#include <CalibUtils.h>
+#include <FitsUtils.h>
+#include <MathUtils.h>
+
+#include "Selection.h"
+
+
 
  
 using namespace std;
@@ -10,10 +26,17 @@ using namespace std;
 
 class ExpRatioEvaluator
 {
-	public: ExpRatioEvaluator(const char * expPath, double minTreshold, double maxTreshold, double l, double b);
+	public: ExpRatioEvaluator(const char * expPath,bool normalize, double minTreshold, double maxTreshold, double l, double b);
 
 
 	const char* expPath;
+	bool normalize;
+	double normalizationFactor;
+	double tStart;
+	double tStop;
+	double timeFactor;
+	double spatialFactor;
+	
 	
 	// If pixel value is not inside [minThreshold, maxThreshold], increments nBad.
 	double minThreshold;
