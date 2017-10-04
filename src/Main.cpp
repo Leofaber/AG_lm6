@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2017
- 	Leonardo Baroncelli, Giancarlo Zollino (IASF-Bologna),
+ 	Leonardo Baroncelli, Giancarlo Zollino,
  *
  * Any information contained in this software
  * is property of the AGILE TEAM and is strictly
@@ -115,8 +115,8 @@ int main(int argc, char *argv[])
 
     // EXPRATIOEVALUATOR OF EXPTO
 	
-	ExpRatioEvaluator expRatioT0(expT0FilePath,doNormalization,minTreshold ,maxTreshold,l,b); 
-	double *expRatioArrayT0 = expRatioT0.computeExpRatioValues(); 
+	ExpRatioEvaluator expRatioT0(expT0FilePath); 
+	double *expRatioArrayT0 = expRatioT0.computeExpRatioValues(l,b,doNormalization,minTreshold,maxTreshold); 
 	if(expRatioArrayT0[0]!=-1) {
 		cout << "ExpRatio evaluation of expT0: " << (int)round(expRatioArrayT0[0])<< endl;		
 	}
@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
  
 	// EXPRATIOEVALUATOR OF EXPT1
 
-	ExpRatioEvaluator expRatioT1(expT1FilePath,doNormalization,minTreshold ,maxTreshold,l,b);
-	double *expRatioArrayT1 = expRatioT1.computeExpRatioValues(); 
+	ExpRatioEvaluator expRatioT1(expT1FilePath);
+	double *expRatioArrayT1 = expRatioT1.computeExpRatioValues(l,b,doNormalization,minTreshold,maxTreshold); 
 	if(expRatioArrayT1[0]!=-1) {
 		cout << "ExpRatio evaluation of expT1: " << (int)round(expRatioArrayT1[0])<< endl;		
 	}
@@ -218,8 +218,8 @@ int main(int argc, char *argv[])
 	
 	// EXPRATIOEVALUATOR OF EXP T2
 
-	ExpRatioEvaluator expRatioT2(expT2FilePath,doNormalization,minTreshold ,maxTreshold,l,b);
-	double *expRatioArrayT2 = expRatioT2.computeExpRatioValues(); 
+	ExpRatioEvaluator expRatioT2(expT2FilePath);
+	double *expRatioArrayT2 = expRatioT2.computeExpRatioValues(l,b,doNormalization,minTreshold,maxTreshold); 
 	if(expRatioArrayT2[0]!=-1) {
 		cout << "ExpRatio evaluation of expT2: " << (int)round(expRatioArrayT2[0])<< endl;		
 	}
