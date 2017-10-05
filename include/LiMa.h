@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2017
- *     Andrea Bulgarelli, Andrea Zoli (IASF-Bologna),
+ *     Leonardo Baroncelli, Giancarlo Zollino
  *
  * Any information contained in this software
  * is property of the AGILE TEAM and is strictly

@@ -1,16 +1,13 @@
+
 /*
  * Copyright (c) 2017
- 	Leonardo Baroncelli, Giancarlo Zollino,
+ *     Leonardo Baroncelli, Giancarlo Zollino
  *
  * Any information contained in this software
  * is property of the AGILE TEAM and is strictly
  * private and confidential.
- *
- * Output: 
- * tstart T0, tstop T0, numero di fotoni T0, numero fotoni esposizione T0, fotoni/esposizione T0, exp-ratioT0,
- * tstart T1, tstop T1,  numero di *fotoni T1, numero fotoni esposizione T1, exp-ratioT1,
- * tstart T2, tstop T2, numero di fotoni T2, numero fotoni esposizione T2, exp-ratioT2,
- * off , somma delle due mappe di bkg (T1 e T2) come fotoni e exp, Li&Ma
+ * 
+ * https://github.com/Leofaber/AG_lm6
 */
 
 #include <iostream>
