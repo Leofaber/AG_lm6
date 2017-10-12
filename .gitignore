@@ -38,7 +38,7 @@ obj/*
 OpenCvLibs/*
 AgileRealImages/*
 MAPFORTEST/*
-
+NEWMAPTEST/*
 # Files
 *.cbp
 *.depend
