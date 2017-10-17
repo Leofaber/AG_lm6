@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(1);
 		resText << ctsT0.tmin << " " << ctsT0.tmax << " ";
 		resText << setprecision(2);
-		resText << ctsT0.binSum << " " << expT0.binSum << " ";
+		resText << (int) ctsT0.binSum << " " << expT0.binSum << " ";
 		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
 		resText << setprecision(5); 
 		resText << (int)round(expRatioArrayT0) << " ";		//eliminato [0]
@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(1);
 		resText << ctsT1.tmin << " " << ctsT1.tmax << " ";
 		resText << setprecision(2);
-		resText << ctsT1.binSum << " " << expT1.binSum << " ";
+		resText << (int) ctsT1.binSum << " " << expT1.binSum << " ";
 		resText << setprecision(5);
 		resText << (int)round(expRatioArrayT1) << " ";	//eliminato [0]
 	}
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 		resText << setprecision(1);
 		resText << ctsT2.tmin << " " << ctsT2.tmax << " ";
 		resText << setprecision(2);
-		resText << ctsT2.binSum << " " << expT2.binSum << " ";
+		resText << (int) ctsT2.binSum << " " << expT2.binSum << " ";
 		resText << setprecision(5);
 		resText << (int)round(expRatioArrayT2) << " ";		//eliminato [0]
 		
@@ -301,11 +301,11 @@ int main(int argc, char *argv[])
 	cout << "\nLI&MA Analysis: " << endl;
 	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,expT0.binSum,expT1.binSum,expT2.binSum);
 	
-	if(expRatioArrayT0 != -1 && expRatioArrayT1 != -1 && expRatioArrayT2 != -1) { 		//elimintao [0]
+	//if(expRatioArrayT0 != -1 && expRatioArrayT1 != -1 && expRatioArrayT2 != -1) { 		//elimintao [0]
 		S = lm.computeLiMiValue();
-	}else{
+	/*}else{
 		S=-1;
-	}
+	}*/
 	
 
 

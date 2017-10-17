@@ -110,7 +110,7 @@ int BinEvaluator::sumBin() {
 	
 	int status,i,j;
 	double greyLevel;
-
+	binSum = 0;
 	
 	if(isRadiusInside()) { 
 		for(int i = 0; i < rows; i++){
