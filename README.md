@@ -1,4 +1,4 @@
-# AG_lm6 1.0.6
+# AG_lm6 1.0.7
 
 AG_lm6 esegue una valutazione Li&Ma il cui output è il valore di significance statistica di una detection.
 Per eseguire il software si deve esportare la variabile $PFILES in modo che punti alla cartella /conf
@@ -28,7 +28,9 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
   
     Li&Ma radius of analysis
     
-    true/false: if true, ExpRatioEvaluator will perform a normalization of the exp maps 
+    normalize (true/false): if true we assert that the exp maps given in input are NOT normalized. ExpRatioEvaluator will perform a normalization of the exp maps.
+    
+    createExpRatioMap (true/false): if true ExpRatioEvaluator will create the exp-ratio map.
   	
 (OPZIONALI) -> è possibile specificare "d" per usare il valore di default
   	
@@ -40,7 +42,7 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
 
 ### Esempio di utilizzo
 
-	./bin/AG_lm6 ../log.txt ../maps/T0.cts ../maps/T0.exp ../maps/T1.cts ../maps/T1.exp ../maps/T2.cts ../maps/T2.exp 45 30 10 true d 150 d 
+	./bin/AG_lm6 ../log.txt ../maps/T0.cts ../maps/T0.exp ../maps/T1.cts ../maps/T1.exp ../maps/T2.cts ../maps/T2.exp 45 30 10 true true d 150 d 
  	
 ### Output
 
