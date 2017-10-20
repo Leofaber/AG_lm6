@@ -14,6 +14,8 @@
 
 #include <AgileMap.h>
 #include <fitsio.h>
+#include <stdio.h>
+
 
  
 using namespace std;
@@ -21,6 +23,8 @@ using namespace std;
 class BinEvaluator {
 	public:
 		BinEvaluator(const char * fitsFilePath, double l, double b, double radius);
+		BinEvaluator(const char * fitsFilePath,double ** normalizedImage, double l, double b, double radius);
+
 		int sumBin();
 		bool isRadiusInside();
 
@@ -38,6 +42,10 @@ class BinEvaluator {
 		int rows;
 		int cols;
 		double ** image;
+		double ** normalizedImage;
+
+	private:
+		 BinEvaluator(const char * delegate, const char *fitsFilePath, double l, double b, double radius);
 
 		
 		

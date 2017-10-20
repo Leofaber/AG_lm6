@@ -13,7 +13,6 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-
  
 
 #include <PilParams.h>
@@ -45,6 +44,7 @@ const PilDescription paramsDescr[] = {
     { PilReal, "b", "Latitude of GRB centroid (galactic)" },
     { PilReal, "radius", "Li&Ma radius of analysis" }, 
     { PilString, "normalize", "true if exp should be normalized, false otherwise" },
+    { PilString, "createExpRatioMap", "true if ExpRatioMap have to be created, false otherwise" },
     { PilNone, "", "" }
 };
 
@@ -59,12 +59,15 @@ int main(int argc, char *argv[])
 	float maxThreshold = 140;
 	int squareSize = 20;
 	bool doNormalization;
+	bool boolcreateExpRatioMap;
+	
+	 
 	
 
 	// CONTROLLO NUMERO PARAMETRI (TOO FEW, TOO MUCH)	
-	if(argc < 12 || argc > 15)
+	if(argc < 13 || argc > 16)
 	{
-		printf("\nAt least 11 arguments expected (+ 3 optional)\n   - The name of the output file\n   - The Input T0 cts file name\n   - The Input T0 exp file name\n   - The Input T1 cts file name\n   - The Input T1 exp file name\n   - The Input T2 cts file name\n   - The Input T2 exp file name\n   - The l coordinate\n   - The b coordinate\n   - The radius size\n   - Normalize boolean: true if exp-ratio must be computed on a normalized map, false otherwise\n\n\n(Optional)\n   - The square size (default value = 10)\n   - The minThreshold (default value = 120)\n   - The maxThreshold (default value = 140)\n\n ");
+		printf("\nAt least 12 arguments expected (+ 3 optional)\n   - The name of the output file\n   - The Input T0 cts file name\n   - The Input T0 exp file name\n   - The Input T1 cts file name\n   - The Input T1 exp file name\n   - The Input T2 cts file name\n   - The Input T2 exp file name\n   - The l coordinate\n   - The b coordinate\n   - The radius size\n   - The normalize boolean: true if exp-ratio must be computed on a normalized map, false otherwise\n   - The createExpRatioMap boolean: true if ExpRatioMap have to be created\n\n(Optional)\n   - The minThreshold (default value = 120)\n   - The maxThreshold (default value = 140)\n   - The square size (default value = 10)\n\n ");
 		cout << endString << endl;		
 		exit (EXIT_FAILURE);
 	}
@@ -86,49 +89,50 @@ int main(int argc, char *argv[])
 	double b = params["b"];
 	double radius = params["radius"]; 
 	const char *normalize = params["normalize"];
+	const char *createExpRatioMap = params["createExpRatioMap"];
 	
 	if( strcmp(normalize, "true") == 0 )
 		doNormalization = true;
 	else
 		doNormalization = false;
-
-
-
+		
+	
+	if( strcmp(createExpRatioMap, "true") == 0 )
+		boolcreateExpRatioMap = true;
+	else
+		boolcreateExpRatioMap = false;
+	
+	
+		
 
 	// PARAMETRI OPZIONALI
-    if(argc == 13) 	
+    if(argc == 14) 	
     {
-		if(((string)argv[12])!="d")
-			squareSize = atoi(argv[12]);
+		if(((string)argv[13])!="d")
+			minThreshold = atof(argv[13]);
 		
     }
-	if(argc == 14) 
-	{
-		if(((string)argv[12])!="d")
-			squareSize = atoi(argv[12]);
-		if(((string)argv[13])!="d")		
-			minThreshold = atof(argv[13]);
-	}
 	if(argc == 15) 
 	{
-		if(((string)argv[12])!="d")
-			squareSize = atoi(argv[12]);
-		if(((string)argv[13])!="d")		
-			minThreshold = atof(argv[13]);
+		if(((string)argv[13])!="d")
+			minThreshold = atoi(argv[13]);
 		if(((string)argv[14])!="d")		
 			maxThreshold = atof(argv[14]);
+	}
+	if(argc == 16) 
+	{
+		if(((string)argv[13])!="d")
+			minThreshold = atoi(argv[13]);
+		if(((string)argv[14])!="d")		
+			maxThreshold = atof(argv[14]);
+		if(((string)argv[15])!="d")		
+			squareSize = atof(argv[15]);
 	}
 		
 	
    
  
-	//cout <<"argc: "<< argc <<"argv[12] "<< argv[12]<<endl;
-	//cout << "squareSize: " << squareSize << " minThreshold: " << minThreshold<<" maxThreshold: " << maxThreshold <<endl;
-	
-	//getchar();
-	
-
-   	ofstream resText(outfile);
+	ofstream resText(outfile);
    	resText.setf(ios::fixed); 
 
 
@@ -137,39 +141,39 @@ int main(int argc, char *argv[])
 	int statusCts = 0;
 	int statusExp = 0;
 	
-
-    // EXPRATIOEVALUATOR OF EXPTO
 	
-	ExpRatioEvaluator expRatioT0(expT0FilePath, doNormalization,minThreshold, maxThreshold, squareSize);
-	double expRatioArrayT0 = expRatioT0.computeExpRatioValues(l,b); 
-	if(expRatioArrayT0!=-1) { //elimintao [0]
-		cout << "ExpRatio evaluation of expT0: " << (int)round(expRatioArrayT0)<< endl;		//elimintao [0]
+
+    // EXPRATIOEVALUATOR OF EXPT0
+	
+	ExpRatioEvaluator expRatioT0(expT0FilePath, doNormalization,boolcreateExpRatioMap,minThreshold, maxThreshold, squareSize);
+	double expRatioValueT0 = expRatioT0.computeExpRatioValues(l,b); 
+	if(expRatioValueT0!=-1) { 
+		cout << "ExpRatio evaluation of expT0: " << (int)round(expRatioValueT0)<< endl;		
 	}
 	 
 		
 	// ANALYSIS OF SOURCE MAP T0
  	// Exp
-	BinEvaluator expT0(expT0FilePath,l,b,radius);
-	if(! expT0.convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "expT0 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
+ 	BinEvaluator * beT0;
+	if(doNormalization) {
+		double **normalizedImageT0 = expRatioT0.getNormalizedMap();
+		beT0 = new BinEvaluator(expT0FilePath,normalizedImageT0,l,b,radius);
 	}
-
-	statusExp = expT0.sumBin();
+	else{
+		beT0 = new BinEvaluator(expT0FilePath,l,b,radius);
+	}
+	
+	statusExp = beT0->sumBin();
 	if(statusExp != 0)
-	{
-		fprintf(stderr,"expT0 Error: the radius exceeds the border of the .exp map\n");
-		exit (EXIT_FAILURE);
-	}
+		{
+			fprintf(stderr,"expT1 Error: the radius exceeds the border of the .exp map\n");
+			exit (EXIT_FAILURE);
+		}
+ 
+	
  	// Cts
 	BinEvaluator ctsT0(ctsT0FilePath,l,b,radius);
-	if(! ctsT0.convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "ctsT0 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
-	}
-
+	
 	statusCts = ctsT0.sumBin();
  	if(statusCts != 0)
 	{
@@ -181,10 +185,10 @@ int main(int argc, char *argv[])
 		resText << setprecision(1);
 		resText << ctsT0.tmin << " " << ctsT0.tmax << " ";
 		resText << setprecision(2);
-		resText << (int) ctsT0.binSum << " " << expT0.binSum << " ";
-		resText << setprecision(10) << ctsT0.binSum / (double) expT0.binSum << " ";
+		resText << (int) ctsT0.binSum << " " << beT0->binSum << " ";
+		resText << setprecision(10) << ctsT0.binSum / (double) beT0->binSum << " ";
 		resText << setprecision(5); 
-		resText << (int)round(expRatioArrayT0) << " ";		//eliminato [0]
+		resText << (int)round(expRatioValueT0) << " ";		
 	}
 	
 	
@@ -194,35 +198,35 @@ int main(int argc, char *argv[])
  
 	// EXPRATIOEVALUATOR OF EXPT1
 
-	ExpRatioEvaluator expRatioT1(expT1FilePath, doNormalization,minThreshold, maxThreshold, squareSize);
-	double expRatioArrayT1 = expRatioT1.computeExpRatioValues(l,b); 
-	if(expRatioArrayT1!=-1) {	//elimintao [0]
-		cout << "ExpRatio evaluation of expT1: " << (int)round(expRatioArrayT1)<< endl;				//elimintao [0]
+	ExpRatioEvaluator expRatioT1(expT1FilePath, doNormalization,boolcreateExpRatioMap,minThreshold, maxThreshold, squareSize);
+	double expRatioValueT1 = expRatioT1.computeExpRatioValues(l,b); 
+	if(expRatioValueT1!=-1) {	
+		cout << "ExpRatio evaluation of expT1: " << (int)round(expRatioValueT1)<< endl;				
 	}
 
 	// ANALYSIS OF MAP T1
-
-	BinEvaluator expT1(expT1FilePath,l,b,radius);
-	if(! expT1.convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "expT1 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
+	BinEvaluator * beT1;
+	if(doNormalization) {
+		double **normalizedImageT1 = expRatioT1.getNormalizedMap();
+		beT1 = new BinEvaluator(expT1FilePath,normalizedImageT1,l,b,radius);
+	}
+	else{
+		beT1 = new BinEvaluator(expT1FilePath,l,b,radius);
 	}
 
-	statusExp = expT1.sumBin();
-	if(statusExp != 0)
-	{
-		fprintf(stderr,"expT1 Error: the radius exceeds the border of the .exp map\n");
-		exit (EXIT_FAILURE);
-	}
+	statusExp = beT1->sumBin();
+		if(statusExp != 0)
+		{
+			fprintf(stderr,"expT1 Error: the radius exceeds the border of the .exp map\n");
+			exit (EXIT_FAILURE);
+		}
+	
+
+	
 
  
 	BinEvaluator ctsT1(ctsT1FilePath,l,b,radius);
-	if(! ctsT1.convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "ctsT1 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
-	}
+	
 
 	statusCts = ctsT1.sumBin();
  	if(statusCts != 0)
@@ -235,44 +239,42 @@ int main(int argc, char *argv[])
 		resText << setprecision(1);
 		resText << ctsT1.tmin << " " << ctsT1.tmax << " ";
 		resText << setprecision(2);
-		resText << (int) ctsT1.binSum << " " << expT1.binSum << " ";
+		resText << (int) ctsT1.binSum << " " << beT1->binSum << " ";
 		resText << setprecision(5);
-		resText << (int)round(expRatioArrayT1) << " ";	//eliminato [0]
+		resText << (int)round(expRatioValueT1) << " ";	
 	}
 	
 	
 	// EXPRATIOEVALUATOR OF EXP T2
 
-	ExpRatioEvaluator expRatioT2(expT2FilePath,doNormalization, minThreshold, maxThreshold, squareSize);
-	double expRatioArrayT2 = expRatioT2.computeExpRatioValues(l,b); 
-	if(expRatioArrayT2!=-1) {		//elimintao [0]
-		cout << "ExpRatio evaluation of expT2: " << (int)round(expRatioArrayT2)<< endl;			//elimintao [0]
+	ExpRatioEvaluator expRatioT2(expT2FilePath,doNormalization,boolcreateExpRatioMap, minThreshold, maxThreshold, squareSize);
+	double expRatioValueT2 = expRatioT2.computeExpRatioValues(l,b); 
+	if(expRatioValueT2!=-1) {
+		cout << "ExpRatio evaluation of expT2: " << (int)round(expRatioValueT2)<< endl;			
 	}
 
 	 
 	// ANALYSIS OF MAP T2
-
-	BinEvaluator expT2(expT2FilePath,l,b,radius);
-	if(! expT2.convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "expT2 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
+	BinEvaluator * beT2;
+	if(doNormalization) {
+		double **normalizedImageT2 = expRatioT2.getNormalizedMap();
+		beT2 = new BinEvaluator(expT2FilePath,normalizedImageT2,l,b,radius);
+	}
+	else{
+		beT2 = new BinEvaluator(expT2FilePath,l,b,radius);
 	}
 
-	statusExp = expT2.sumBin();
-	if(statusExp != 0)
-	{
-		fprintf(stderr,"expT2 Error: the radius exceeds the border of the .exp map\n");
-		exit (EXIT_FAILURE);
-	}
+	statusExp = beT2->sumBin();
+		if(statusExp != 0)
+		{
+			fprintf(stderr,"expT2 Error: the radius exceeds the border of the .exp map\n");
+			exit (EXIT_FAILURE);
+		}
+	
 
  
 	BinEvaluator ctsT2(ctsT2FilePath,l,b,radius);
-	if(! ctsT2.convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "ctsT2 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
-	}
+	
 
 	statusCts = ctsT2.sumBin();
  	if(statusCts != 0)
@@ -285,9 +287,9 @@ int main(int argc, char *argv[])
 		resText << setprecision(1);
 		resText << ctsT2.tmin << " " << ctsT2.tmax << " ";
 		resText << setprecision(2);
-		resText << (int) ctsT2.binSum << " " << expT2.binSum << " ";
+		resText << (int) ctsT2.binSum << " " << beT2->binSum << " ";
 		resText << setprecision(5);
-		resText << (int)round(expRatioArrayT2) << " ";		//eliminato [0]
+		resText << (int)round(expRatioValueT2) << " ";		
 		
 	}
 	
@@ -299,7 +301,7 @@ int main(int argc, char *argv[])
 	// LI&MA Analysis
 	double S;
 	cout << "\nLI&MA Analysis: " << endl;
-	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,expT0.binSum,expT1.binSum,expT2.binSum);
+	LiMa lm(ctsT0.binSum,ctsT1.binSum,ctsT2.binSum,beT0->binSum,beT1->binSum,beT2->binSum);
 	
 	//if(expRatioArrayT0 != -1 && expRatioArrayT1 != -1 && expRatioArrayT2 != -1) { 		//elimintao [0]
 		S = lm.computeLiMiValue();

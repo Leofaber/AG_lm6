@@ -10,7 +10,25 @@
 
 #include "BinEvaluator.h"
 
-BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, double _radius) {
+BinEvaluator::BinEvaluator(const char *_fitsFilePath,double ** _normalizedImage, double _l, double _b, double _radius) :
+	BinEvaluator(" ", _fitsFilePath, _l, _b, _radius)
+{	
+	image = _normalizedImage;
+}
+
+BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, double _radius) :
+	BinEvaluator(" ", _fitsFilePath, _l, _b, _radius)
+{
+			
+	if(! convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "expT0 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
+}
+
+BinEvaluator::BinEvaluator(const char * delegate, const char *_fitsFilePath, double _l, double _b, double _radius) 
+{	
 	fitsFilePath=_fitsFilePath;
 	l=_l;
 	b=_b;
@@ -22,8 +40,10 @@ BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, doub
 	x=0;
 	y=0;
 	agileMapUtils->GetRowCol(l,b,&x,&y);
- 
+	rows = agileMapUtils->Rows();
+	cols = agileMapUtils->Cols();
 }
+
 
 bool BinEvaluator::convertFitsDataToMatrix() {
 	
@@ -47,8 +67,6 @@ bool BinEvaluator::convertFitsDataToMatrix() {
 			}			
 			else
 			{	 
-				rows = (int)naxes[0]; 
-				cols = (int)naxes[1];
 				image = new double*[rows];
 				for (int i = 0; i < rows; ++i){
 					image[i] = new double[cols];
@@ -103,20 +121,18 @@ bool BinEvaluator::convertFitsDataToMatrix() {
 	return true;	
 }
 
-
-
-int BinEvaluator::sumBin() {
-	
+int BinEvaluator::sumBin() 
+{
 	
 	int status,i,j;
 	double greyLevel;
 	binSum = 0;
-	
+		
 	if(isRadiusInside()) { 
 		for(int i = 0; i < rows; i++){
 			for(int j=0; j < cols; j++){
 					greyLevel = image[i][j];
-					if(greyLevel>0 && agileMapUtils->SrcDist(i,j,l,b)<=radius){
+					if(greyLevel>0 && agileMapUtils->SrcDist(i,j,l,b) < radius){
 						binSum+=greyLevel;
 
 				}
@@ -127,6 +143,8 @@ int BinEvaluator::sumBin() {
 	}
 	return 0;
 }
+
+
 
 bool BinEvaluator::isRadiusInside() {
 	
@@ -139,10 +157,11 @@ bool BinEvaluator::isRadiusInside() {
 	distDx =  sqrt(pow(double(cols-1-x),2));
 	distUp =  sqrt(pow(double(0-y),2));
 	distDown = sqrt(pow(double(rows-1-y),2));
-	if(distSx < radius || distDx < radius || distUp < radius || distDown < radius)
+	if(distSx < radius || distDx < radius || distUp < radius || distDown < radius) 
 		return false;
 	else
 		return true;
+	
 
 /*	
 	for(int i = 0; i < rows; i++){
