@@ -49,6 +49,7 @@ NEWMAPTEST/*
 *.cts.gz
 *.swp
 *.save
+*.gz
 version
 include/ExpRatioEvaluator.h
 src/ExpRatioEvaluator.cpp
