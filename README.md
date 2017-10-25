@@ -5,7 +5,7 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
 
 ### Esempio di utilizzo
 
-    ./bin/AG_lm6  log.txt  maps/T0.cts  maps/T0.exp  false  maps/T1.cts  maps/T1.exp  false  maps/T2.cts  maps/T2.exp  false  45  30  10  true  true  d  160  d  
+    ./bin/AG_lm6  log.txt  maps/T0.cts  maps/T0.exp  maps/T1.cts  maps/T1.exp  maps/T2.cts  maps/T2.exp  false  45  30  10  true  true  d  160  d  
 
 ### Input:
   
@@ -14,20 +14,16 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
     Path to T0.cts
   
     Path to T0.exp
-    
-    Is T0.exp already normalized? (true/false)
-    
+      
     Path to T1.cts
   
     Path to T1.exp
-    
-    Is T1.exp already normalized? (true/false)
-    
+        
     Path to T2.cts 
   
     Path to T2.exp
     
-    Is T2.exp already normalized? (true/false)
+    Are T0,T1,T2 exp maps already normalized? (true/false)
   
     Galactic longitude of GRB centroid
   
@@ -38,9 +34,9 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
       	
 (OPZIONALI) -> è possibile specificare "d" per usare il valore di default
   	
-    createExpNormalizedMap : se il valore è true verrà scritta su file la mappa normalizzata. ( true/false ) ( default = false)
+    createExpNormalizedMap : se il valore è true verrà scritta su file le mappe normalizzate per T0,T1 e T2. ( true/false ) ( default = false)
     
-    createExpRatioMap: se il valore è "true", verrà scritta su file la mappa exp-ratio ovvero quella mappa in cui il valore di ogni pixel rappresenta il valore della valutazione exp-ratio calcolato sul medesimo pixel. ( true/false ) ( default = false)
+    createExpRatioMap: se il valore è "true", verrà scritta su file le mappe exp-ratio per T0,T1 e T2 ovvero quelle mappe in cui il valore di ogni pixel rappresenta il valore della valutazione exp-ratio calcolato sul medesimo pixel. ( true/false ) ( default = false)
     
     minThreshold: la soglia minima sotto la quale il pixel è considerato "bad" per il calcolo dell'exp-ratio ( double ) ( default = 120 )
 	
