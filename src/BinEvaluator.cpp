@@ -10,25 +10,9 @@
 
 #include "BinEvaluator.h"
 
-BinEvaluator::BinEvaluator(const char *_fitsFilePath,double ** _normalizedImage, double _l, double _b, double _radius) :
-	BinEvaluator(" ", _fitsFilePath, _l, _b, _radius)
+BinEvaluator::BinEvaluator(const char *_fitsFilePath,double ** _image, double _l, double _b, double _radius)
 {	
-	image = _normalizedImage;
-}
-
-BinEvaluator::BinEvaluator(const char *_fitsFilePath, double _l, double _b, double _radius) :
-	BinEvaluator(" ", _fitsFilePath, _l, _b, _radius)
-{
-			
-	if(! convertFitsDataToMatrix() )
-	{
-		fprintf( stderr, "expT0 convertFitsDataToMatrix() Error reading fits file\n");
-		exit (EXIT_FAILURE);
-	}
-}
-
-BinEvaluator::BinEvaluator(const char * delegate, const char *_fitsFilePath, double _l, double _b, double _radius) 
-{	
+	image = _image;
 	fitsFilePath=_fitsFilePath;
 	l=_l;
 	b=_b;
@@ -42,12 +26,32 @@ BinEvaluator::BinEvaluator(const char * delegate, const char *_fitsFilePath, dou
 	agileMapUtils->GetRowCol(l,b,&x,&y);
 	rows = agileMapUtils->Rows();
 	cols = agileMapUtils->Cols();
+
 }
 
-
-bool BinEvaluator::convertFitsDataToMatrix() {
+BinEvaluator::BinEvaluator(const char * _fitsFilePath, double _l, double _b, double _radius){
+	fitsFilePath=_fitsFilePath;	
+	l=_l;
+	b=_b;
+	radius=_radius;
+	binSum=0;
+	agileMapUtils = new AgileMap(_fitsFilePath);
+	tmin = agileMapUtils->GetTstart();
+	tmax = agileMapUtils->GetTstop();
+	x=0;
+	y=0;
+	agileMapUtils->GetRowCol(l,b,&x,&y);
+	rows = agileMapUtils->Rows();
+	cols = agileMapUtils->Cols();
+	if(! convertFitsDataToMatrix() )
+	{
+		fprintf( stderr, "expT0 convertFitsDataToMatrix() Error reading fits file\n");
+		exit (EXIT_FAILURE);
+	}
 	
-//CFITSIO
+}
+
+bool BinEvaluator::convertFitsDataToMatrix(){
 	fitsfile *fptr;   /* FITS file pointer, defined in fitsio.h */
 	int status = 0;   /* CFITSIO status value MUST be initialized to zero! */
 	int bitpix, naxis, ii, anynul;
@@ -118,16 +122,16 @@ bool BinEvaluator::convertFitsDataToMatrix() {
 		return false;	
 	}	
 
-	return true;	
+return true; 
 }
 
 int BinEvaluator::sumBin() 
 {
 	
-	int status,i,j;
+
 	double greyLevel;
 	binSum = 0;
-		
+
 	if(isRadiusInside()) { 
 		for(int i = 0; i < rows; i++){
 			for(int j=0; j < cols; j++){
@@ -138,6 +142,7 @@ int BinEvaluator::sumBin()
 				}
 			}
 		}
+
 	}else{
 		return -1;
 	}
