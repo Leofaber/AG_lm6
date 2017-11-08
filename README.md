@@ -1,11 +1,11 @@
-# AG_lm6 1.0.8
+# AG_lm6 1.0.9
 
 AG_lm6 esegue una valutazione Li&Ma il cui output è il valore di significance statistica di una detection.
 Per eseguire il software si deve esportare la variabile $PFILES in modo che punti alla cartella /conf
 
 ### Esempio di utilizzo
 
-    ./bin/AG_lm6  log.txt  maps/T0.cts  maps/T0.exp  maps/T1.cts  maps/T1.exp  maps/T2.cts  maps/T2.exp  false  45  30  10  false true  true 110 160 10  
+    ./bin/AG_lm6  log.txt  maps/T0.cts  maps/T0.exp  maps/T1.cts  maps/T1.exp  maps/T2.cts  maps/T2.exp  no  45  30  10  no yes yes 110 160 10  
 
 ### Input:
   
@@ -23,7 +23,7 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
   
     Path to T2.exp
     
-    Are T0,T1,T2 exp maps already normalized? (true/false)
+    Are T0,T1,T2 exp maps already normalized? (yes/no)
   
     Galactic longitude of GRB centroid
   
@@ -31,11 +31,11 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
   
     Li&Ma radius of analysis
       	
-    binSumOnNormalizedMap: se il valore è true calcola la bin-sum sulle exp normalizzate.
+    binSumOnNormalizedMap: se il valore è "yes" calcola la bin-sum sulle exp normalizzate.
 	
     createExpNormalizedMap : se il valore è true verrà scritta su file le mappe normalizzate per T0,T1 e T2.
     
-    createExpRatioMap: se il valore è "true", verrà scritta su file le mappe exp-ratio per T0,T1 e T2 ovvero quelle mappe in cui il valore di ogni pixel rappresenta il valore della valutazione exp-ratio calcolato sul medesimo pixel. 
+    createExpRatioMap: se il valore è "yes", verrà scritta su file le mappe exp-ratio per T0,T1 e T2 ovvero quelle mappe in cui il valore di ogni pixel rappresenta il valore della valutazione exp-ratio calcolato sul medesimo pixel. 
     
     minThreshold: la soglia minima sotto la quale il pixel è considerato "bad" per il calcolo dell'exp-ratio 
 	
