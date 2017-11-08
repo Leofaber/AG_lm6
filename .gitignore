@@ -53,3 +53,6 @@ NEWMAPTEST/*
 version
 include/ExpRatioEvaluator.h
 src/ExpRatioEvaluator.cpp
+include/MapConverter.h
+src/MapConverter.cpp
+
