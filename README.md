@@ -1,11 +1,11 @@
-# AG_lm6 1.0.7
+# AG_lm6 1.0.8
 
 AG_lm6 esegue una valutazione Li&Ma il cui output è il valore di significance statistica di una detection.
 Per eseguire il software si deve esportare la variabile $PFILES in modo che punti alla cartella /conf
 
 ### Esempio di utilizzo
 
-    ./bin/AG_lm6  log.txt  maps/T0.cts  maps/T0.exp  maps/T1.cts  maps/T1.exp  maps/T2.cts  maps/T2.exp  false  45  30  10  false true  true  d  160  d  
+    ./bin/AG_lm6  log.txt  maps/T0.cts  maps/T0.exp  maps/T1.cts  maps/T1.exp  maps/T2.cts  maps/T2.exp  false  45  30  10  false true  true 110 160 10  
 
 ### Input:
   
@@ -30,21 +30,18 @@ Per eseguire il software si deve esportare la variabile $PFILES in modo che punt
     Galactic latitude of GRB centroid
   
     Li&Ma radius of analysis
-    
       	
-(OPZIONALI) -> è possibile specificare "d" per usare il valore di default
-  	
-    binSumOnNormalizedMap: se il valore è true calcola la bin-sum sulle exp normalizzate. (true/false) (default =true)
+    binSumOnNormalizedMap: se il valore è true calcola la bin-sum sulle exp normalizzate.
 	
-    createExpNormalizedMap : se il valore è true verrà scritta su file le mappe normalizzate per T0,T1 e T2. ( true/false ) ( default = false)
+    createExpNormalizedMap : se il valore è true verrà scritta su file le mappe normalizzate per T0,T1 e T2.
     
-    createExpRatioMap: se il valore è "true", verrà scritta su file le mappe exp-ratio per T0,T1 e T2 ovvero quelle mappe in cui il valore di ogni pixel rappresenta il valore della valutazione exp-ratio calcolato sul medesimo pixel. ( true/false ) ( default = false)
+    createExpRatioMap: se il valore è "true", verrà scritta su file le mappe exp-ratio per T0,T1 e T2 ovvero quelle mappe in cui il valore di ogni pixel rappresenta il valore della valutazione exp-ratio calcolato sul medesimo pixel. 
     
-    minThreshold: la soglia minima sotto la quale il pixel è considerato "bad" per il calcolo dell'exp-ratio ( double ) ( default = 120 )
+    minThreshold: la soglia minima sotto la quale il pixel è considerato "bad" per il calcolo dell'exp-ratio 
 	
-    maxThreshold: la soglia minima sopra la quale il pixel è considerato "bad" per il calcolo dell'exp-ratio ( double ) ( default = 140 )
+    maxThreshold: la soglia minima sopra la quale il pixel è considerato "bad" per il calcolo dell'exp-ratio
 
-    squareSize: la dimensione in pixel del lato della regione (quadrato) su cui si calcola l'exp-ratio ( int ) ( default = 10 )
+    squareSize: la dimensione in pixel del lato della regione (quadrato) su cui si calcola l'exp-ratio 
 
  	
 ### Output
