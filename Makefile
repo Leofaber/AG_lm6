@@ -22,7 +22,7 @@ SHELL = /bin/sh
 
 SYSTEM= $(shell gcc -dumpmachine)
 #ice, ctarta, mpi, cfitsio
-LINKERENV= cfitsio, pil, wcs, agile
+LINKERENV= cfitsio, pil, wcs, agile, root
 
 # Applications
 AG_EXE = AG_lm6
@@ -119,7 +119,7 @@ ifneq (, $(findstring cfitsio, $(LINKERENV)))
     LIBS += -L$(CFITSIO)/lib -lcfitsio
 endif
 
- 
+
 LINK     = $(CXX)
 #for link
 LFLAGS = -shared -Wl,-soname,$(TARGET1) -Wl,-rpath,$(DESTDIR)
@@ -198,7 +198,7 @@ exe: makeobjdir $(OBJECTS)
 
 staticlib: makelibdir makeobjdir $(OBJECTS)
 	test -d $(LIB_DESTDIR) || mkdir -p $(LIB_DESTDIR)
-	$(DEL_FILE) $(LIB_DESTDIR)/$(TARGETA) 
+	$(DEL_FILE) $(LIB_DESTDIR)/$(TARGETA)
 	$(AR) $(LIB_DESTDIR)/$(TARGETA) $(OBJECTS_DIR)/*.o
 
 dynamiclib: makelibdir makeobjdir $(OBJECTS)

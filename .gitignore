@@ -38,7 +38,7 @@ obj/*
 OpenCvLibs/*
 AgileRealImages/*
 MAPFORTEST/*
-NEWMAPTEST/*
+maps/*
 # Files
 *.cbp
 *.depend
@@ -55,4 +55,4 @@ include/ExpRatioEvaluator.h
 src/ExpRatioEvaluator.cpp
 include/MapConverter.h
 src/MapConverter.cpp
-
+run.sh
